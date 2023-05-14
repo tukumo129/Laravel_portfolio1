@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Calendar;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Calendar\Form\CalendarFormView;
-use App\Calendar\ExtraHoliday;
+use App\Calendar\CalendarFormView;
+use App\Calendar\ExtraHolidays;
 
 class ExtraHolidaySettingController extends Controller
 {
@@ -18,7 +18,7 @@ class ExtraHolidaySettingController extends Controller
 	}
 	public function update(Request $request){
 		$input = $request->get("extra_holiday");
-		ExtraHoliday::updateExtraHolidayWithMonth(date("Ym"), $input);
+		ExtraHolidays::updateExtraHolidayWithMonth(date("Ym"), $input);
 		return redirect()
 			->action("Calendar\ExtraHolidaySettingController@form")
 			->withStatus("保存しました");

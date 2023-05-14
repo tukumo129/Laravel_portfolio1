@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWorkPlanTable extends Migration
+class CreateHolidaysTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateWorkPlanTable extends Migration
      */
     public function up()
     {
-        Schema::create('work_plan', function (Blueprint $table) {
+        Schema::create('holidays', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id');
-			$table->string("date_key", 8);
-			$table->integer("date_flag")->default(0);
-			$table->string("comment")->nullable();
+            $table->string('holiday_day_of_week');
+            $table->string('holiday_type');
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateWorkPlanTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('work_plan');
+        Schema::dropIfExists('holidays');
     }
 }

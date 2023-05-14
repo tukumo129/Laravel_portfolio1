@@ -3,27 +3,33 @@
 namespace App\Calendar;
 
 use Carbon\Carbon;
-use App\Calendar\ExtraHoliday;
+use App\Calendar\Holidays;
 
 class CalendarView
 {
     protected $carbon;
-    protected $holidays = [];
+	protected $attendanceScheduleWithMonth;
+	protected $holidays;
+	protected $extraHolidays;
 
-    function __construct($date) {
+	function __construct($date) {
         $this->carbon = new Carbon($date);
+		$attendanceSchedule = new AttendanceSchedules();
+		$this->attendanceScheduleWithMonth = $attendanceSchedule->getAttendanceScheduleWithMonth($this->carbon->format("Ym"));
+		$this->holidays = new Holidays();
+		$this->extraHolidays = new ExtraHolidays();
     }
 
     public function getTitle() {
         return $this->carbon->format('Y年n月');
     }
-
+	
     function render() {
-		$setting = HolidaySetting::first();
-		if(!$setting)$setting = new HolidaySetting();
+		// $setting = HolidaySetting::first();
+		// if(!$setting)$setting = new HolidaySetting();
 
-		$setting->loadHoliday($this->carbon->format("Y"));
-		$this->holidays = ExtraHoliday::getExtraHolidayWithMonth($this->carbon->format("Ym"));
+		// $setting->loadHoliday($this->carbon->format("Y"));
+		// $this->holidays = ExtraHoliday::getExtraHolidayWithMonth($this->carbon->format("Ym"));
 		$html = [];
 		$html[] = '<div class="calendar">';
 		$html[] = '<table class="table">';
@@ -38,11 +44,10 @@ class CalendarView
         $html[] = '<th>日</th>';
 		$html[] = '</tr>';
 		$html[] = '</thead>';
-
  		$html[] = '<tbody>';
 		
-		$tmp = $this->getCalendar($setting,$this->holidays);
-		$month = $tmp->getMonth($this->carbon->copy());
+		$tmp = new Calendar();
+		$month = $tmp->getMonthDates($this->carbon->copy());
 		$count = 0;
 		foreach($month as $week){
 			$html[] = '<tr class=week-"'.$count.'">';
@@ -57,15 +62,31 @@ class CalendarView
 		$html[] = '</div>';
 		return implode("", $html);
     }
-	function getCalendar($setting,$holidays) {
-		return new GetCalendar($setting,$this->holidays);
-	}
+	// function getCalendar($setting,$holidays) {
+	// 	return new GetCalendar($setting,$this->holidays);
+	// }
 	
 	function dayRendar($day) {
 		$html = [];
-		$html[] = '<td class="'.$day->getClassName().'">';
-		$html[] =  '<p class="day">' . $day->getCarbon()->format("j"). '</p>';
+		$html[] = '<td class="'.$this->getDayClass($day).'">';
+		$html[] = '<p class="day">' . $day->format("j"). '</p>';
 		$html[] = '</td>';
 		return implode("", $html);
+	}
+
+	function getDayClass($day){
+		$classNames = [];
+
+		if($this->carbon->month == $day->month){
+			$classNames = [ "day-" . strtolower($day->format("D")) ];
+			if($this->extraHolidays->isClose($day->format("Ymd"))){
+				$classNames[] = "day-close"; //臨時営業
+			} else if($this->holidays->isHoliday($day)){
+				$classNames[] = "day-close";
+			}
+		} else {
+			$classNames[] = "day-blank";
+		}
+		return implode(" ", $classNames);
 	}
 }

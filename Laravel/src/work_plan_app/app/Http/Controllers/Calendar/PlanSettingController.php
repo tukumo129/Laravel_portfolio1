@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Calendar;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Calendar\planSetting\CalendarPlanSettingView;
-use App\Calendar\WorkPlan;
+use App\Calendar\CalendarPlanSettingView;
+use App\Calendar\AttendanceSchedules;
 
 class PlanSettingController extends Controller
 {
@@ -17,8 +17,8 @@ class PlanSettingController extends Controller
 	}
 	public function update(Request $request){
 		$user = \Auth::user();
-		$input = $request->get("work_plan");
-		WorkPlan::updateWorkPlanWithMonth(date("Ym"), $input);
+		$input = $request->get("attendance_schedules");
+		AttendanceSchedules::updateAttendanceScheduleWithMonth(date("Ym"), $input);
 		return redirect()
 			->action("Calendar\PlanSettingController@form")
 			->withStatus("保存しました");

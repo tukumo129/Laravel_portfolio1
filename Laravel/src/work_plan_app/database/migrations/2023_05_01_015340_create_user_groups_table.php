@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateExtraHolidayTable extends Migration
+class CreateUserGroupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateExtraHolidayTable extends Migration
      */
     public function up()
     {
-        Schema::create('extra_holiday', function (Blueprint $table) {
+        Schema::create('user_groups', function (Blueprint $table) {
             $table->bigIncrements('id');
-			$table->string("date_key", 8)->unique();
-			$table->integer("date_flag")->default(0);
-			$table->string("comment")->nullable();
+            $table->string('group_name');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreateExtraHolidayTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('extra_holiday');
+        Schema::dropIfExists('user_groups');
     }
 }

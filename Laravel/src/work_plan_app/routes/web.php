@@ -14,7 +14,8 @@
 Auth::routes();
 
 Route::group(['middleware' => 'auth'],function() {
-    Route::get('/', 'Calendar\PlanSettingController@form');
+    Route::get('/', 'Calendar\PlanSettingController@form')->name("home");
+    Route::get('/home', 'Calendar\PlanSettingController@form')->name("home");
     Route::get('/holiday_setting', 'Calendar\HolidaySettingController@form')->name("holiday_setting");
     Route::post('/holiday_setting', 'Calendar\HolidaySettingController@update')->name("update_holiday_setting");
     Route::get('/extra_holiday_setting', 'Calendar\ExtraHolidaySettingController@form')->name("extra_holiday_setting");
