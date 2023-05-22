@@ -21,7 +21,7 @@ class ExtraHolidays extends Model
     function isOpen($date) {
         return $this->getExtraHolidayType($date) == ExtraHolidays::OPEN;
     }
-    
+
 	function isUpdate($holiday_type){
 		return $holiday_type == ExtraHolidays::OPEN || $holiday_type == ExtraHolidays::CLOSE;
 	}
@@ -42,18 +42,18 @@ class ExtraHolidays extends Model
 	}
 
     public static function updateExtraHolidayWithMonth($ym, $input){
-		$extreaHolidays = self::getExtraHolidayWithMonth($ym);
+		$extraHolidays = self::getExtraHolidayWithMonth($ym);
 		foreach($input as $holiday_date => $array){
-			
-			if(isset($extreaHolidays[$holiday_date])){	//既に作成済の場合
 
-				$extraHoliday = $extreaHolidays[$holiday_date];
+			if(isset($extraHolidays[$holiday_date])){	//既に作成済の場合
+
+				$extraHoliday = $extraHolidays[$holiday_date];
 				$extraHoliday->fill($array);
 
 				//CloseかOpen指定の場合は上書き
 				if($extraHoliday->isUpdate($extraHoliday->holiday_type)){
 					$extraHoliday->save();
-				
+
 				//指定なしを選択している場合は削除
 				}else{
 					$extraHoliday->delete();

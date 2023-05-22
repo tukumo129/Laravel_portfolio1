@@ -14,10 +14,9 @@ class AddColumnsToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            // $table->string('user_type')->after('password');
-            // $table->unsignedBigInteger('group_id')->after('user_type')->nullable();
-
-            // $table->foreign('group_id')->references('id')->on('user_groups')->onDelete('cascade');
+            $table->string('user_type')->after('password');
+            $table->unsignedBigInteger('group_id')->after('user_type')->nullable();
+            $table->foreign('group_id')->references('id')->on('user_groups')->onDelete('cascade');
         });
     }
 

@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','user_type','group_id',
     ];
 
     /**
@@ -36,4 +36,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    protected $userTypes = [
+        '通常'=> '1',
+        '管理者'=> '2'
+    ];
+    public function getUserTypes() {
+        return $this->userTypes;
+    }
 }

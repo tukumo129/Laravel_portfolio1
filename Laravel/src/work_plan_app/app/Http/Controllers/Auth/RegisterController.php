@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\User\UserGroups;
 
 class RegisterController extends Controller
 {
@@ -52,6 +53,8 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'user_type' => ['required', 'string', 'max:255'],
+            'group_id' => ['required', 'integer', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
@@ -67,7 +70,18 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'user_type' => $data['user_type'],
+            'group_id' => $data['group_id'],
             'password' => Hash::make($data['password']),
         ]);
+    }
+
+    public function showRegistrationForm()
+    {
+        $userGroups = new UserGroups();
+        $userGroup = $userGroups->getUserGroups();
+        $users = new User();
+        $userTypes = $users->getUserTypes();
+        return view('auth.register' ,compact('userGroup'),compact('userTypes'));
     }
 }
