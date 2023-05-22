@@ -12,15 +12,6 @@ class UserGroups extends Model
 		"group_name",
     ];
 
-    protected $userTypes = [
-        '通常' => '1',
-        '管理者' => '2',
-    ];
-
-    public function getUserTypes() {
-        return $this->userTypes;
-    }
-
 	public static function getUserGroups () {
 		return UserGroups::get()->keyBy("group_name");
     }
@@ -30,7 +21,6 @@ class UserGroups extends Model
 		foreach($input as $group_id => $group_name){
             if(isset($userGroups[$group_name])) {
                 $userGroup = new UserGroups();
-                // $userGroup->user_id = $user['id'];
                 $userGroup->group_name = $group_name;
                 $userGroup->fill($array);
                 $AttendanceSchedule->save();
